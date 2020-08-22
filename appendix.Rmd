@@ -1,0 +1,156 @@
+---
+title: "Appendix"
+author: "Max Aantjes"
+date: "22/08/2020"
+output:
+  github_document:
+    toc: true
+    toc_depth: 3
+always_allow_html: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# R Packages
+The following R packages are used in this analysis.
+
+```{r, message = FALSE}
+library(tidyverse)
+library(knitr)
+library(stringr)
+library(ggplot2)
+```
+# Data Extraction
+## Data Source and Relevance
+The indicator values for this analysis are taken from the results of the  Ecuadorian National Multi-Purpose Household Survey of December 2019 (Encuesta Nacional Multipropósito de Hogares - Diciembre 2019). The survey collected data for a variety of socio-economic indicators and was conducted by the Ecuadorian national census and statistics institute, INEC. At the time of writing, the form and raw data are available in this [online repository](https://www.ecuadorencifras.gob.ec/encuesta-nacional-multiproposito-de-hogares/). 
+
+## Download
+The following code is used to extract the data from the INEC's official website. 
+
+```{r echo = TRUE, results = 'hide', message = FALSE}
+url <- "https://www.ecuadorencifras.gob.ec/documentos/web-inec/Multiproposito/2019/BDD_DATOS_ABIERTOS_MULTI%20_2019_12_CSV.zip"
+download.file(url, "temp.zip")
+unzip("temp.zip")
+dfhousehold <- read.csv("BDD_DATOS_ABIERTOS_MULTI _2019_12_CSV//201912_multibdd_equipamiento.sav.csv", sep = ";")
+dfperson <-  read.csv("BDD_DATOS_ABIERTOS_MULTI _2019_12_CSV//201912_multibdd_personas.sav.csv", sep = ";")
+unlink("BDD_DATOS_ABIERTOS_MULTI _2019_12_CSV", recursive = TRUE)
+file.remove("temp.zip")
+```
+
+# Data Cleaning
+## Missing Values
+Missing values will not be removed at this stage for the ```dfperson``` and ```dfequipment``` data sets. The reason for this is that the questions in their respective survey sections were constructed in a hierarchical manner, where answers to earlier questions can make later questions redundant. Follow-up questions (such as for example: do you own a smartphone?) were not asked if the respondent answered "no"to a preceding question (such as for example: do you own a phone?). For this reason, missing values do **not** necessarily indicate missing information. Accordingly, missing values are interpreted, adapted and potentially removed at sub-indicator level, on a case by case basis. The code and rational for this process are available in the other appendix sections.  
+
+## Merging the Two Data Sets
+The information on household level and person level is first merged using the *id_hogar* variable. 
+
+```{r}
+df <- dfperson %>%
+        left_join(dfhousehold, by = "id_hogar") %>%
+        rename("area" = 1, "postcode" = 2)
+```
+
+## Subset of Data of Interest
+Only households with children or young people of schoolgoing age (5 - 18 year-olds) will be considered in this analysis. For this purpose, the data is subsetted. The ```agecheck()``` function checks if there is at least one household member who is between 5 and 18 years old, returning value 1, or not, returning value 0. 
+
+```{r}
+agecheck <- function(x){
+        y <- 0
+        for(i in 1:length(x)){
+                if(x[i] %in% 5:18){
+                        y <-1}}
+        return(y)}
+```
+
+The households identification numbers of household where the ```agecheck()``` function returns 1 are then stored in the ```subset``` data frame.  
+```{r}
+subset <- df %>%
+        group_by(id_hogar) %>%
+        summarise(subset = agecheck(s1p3)) %>%
+        select(id_hogar, subset)
+```
+
+The households of interest are subsetted from the ```dfequipment``` data frame. 
+
+```{r}
+df <- df %>%
+        left_join(subset, by = "id_hogar") %>%
+        filter(subset == 1) %>%
+        select(-subset)
+```
+
+
+# Analysis
+## Availability of Electronic Devices
+
+
+## Access To Internet
+
+The access to internet can be estimated with the following variables:
+
+```{r echo = FALSE}
+names <- c("Variable", "Form Section", "Question", "Responses")
+variable <- c("area", "s11p2")
+form.section <- c("NA", "Section 11, question 2")
+question <- c("Determined by Interviewer", "Does the household have access to internet? (Tiene este hogar acceso a internet?)")
+responses <- c("1 = rural, 2 = urban", "1 = yes, 2 = no")
+table <- data.frame(cbind(variable, form.section, question, responses))
+names(table) <- names
+kable(table)
+```
+
+The variables are first converted into factor variables. There are no NA values in the data frame.
+
+```{r}
+df1 <- df %>%
+        mutate(s11p2 = factor(s11p2, levels = 1:2, labels = c("Have Access", "Have No Access"))) %>%
+        mutate(area = factor(area, levels = 1:2, labels = c("urban", "rural")))
+sum(is.na(df$s11p2))
+```
+
+The data from respondents aged 5 to 18 is then filtered.
+
+```{r}
+df2 <- df1 %>%
+        filter(s1p3 %in% 5:18)
+nrow(df2)
+```
+
+Subsequently, the proportions of respondents with and without access to the internet are calculated for both areas (rural and urban). This is saved in a new data frame.
+
+```{r}
+intacc <- df2 %>%
+        group_by(area, s11p2) %>%
+        count() %>%
+        ungroup() %>%
+        group_by(area) %>%
+        mutate(prop = n/sum(n)*100) %>%
+        select(area, s11p2, prop)
+```
+
+Finally, a graph is created which compares the proportions in rural and urban areas. 
+
+```{r}
+p <- ggplot(data = intacc, aes(y = prop, x = area, fill = s11p2)) + theme_bw()
+p1 <- p + geom_bar(position = "dodge", stat = "identity") 
+p2 <- p1 + labs(y = "Proportion of respondents (in %)", x = "", title = "Figure 2: Lack of Home Internet Connection of School-Age Population", subtitle = "Based on data from 10,543 respondents between 5 and 18 years old. Data collected\nthrough randomised cluster sampling at national level, where clusters\nwere constituted of households belonging to certain socio-economic strata.", caption = "Source: INEC Multi-Purpose Household Survey 2019", fill = "")
+p3 <- p2 + scale_fill_manual(name = "", values = (c("Have Access" = "#A3BFA5", "Have No Access" = "#A26E6E")))
+p3
+```
+
+Figure 1.1 graphs the resulting distribution. The distribution is is slightly left-skewed. Nevertheless, the distance between the minimum and maximum values remain meaningful in terms of relative risk: the minimum value, 27%, indicates a substantial amount of respondents in the province were connected (which corresponds with the lowest level of risk); the maximum value, 81%, indicates almost none of the survey respondents in the province were connected (which corresponds with the highest level of risk). There are thus no problematic outliers and normalisation can be performed.  
+
+```{r echo = FALSE}
+median <- median(dim1ind1$access)
+p <- ggplot(data = dim1ind1, aes(x = access)) + theme_bw()
+p1 <- p + geom_histogram(binwidth = 5)
+p2 <- p1 + geom_vline(aes(xintercept = median, col = "Median"))
+p3 <- p2 + labs(x = "Proportion of respondents not connected\nat home per Province (in %)", y = "Frequency", title = "Figure 1.1: Lack of Home Internet Connection per Province", color = "")
+p3
+```
+
+## Digital Literacy
+
+
