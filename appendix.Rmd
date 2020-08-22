@@ -84,7 +84,59 @@ df <- df %>%
 
 # Analysis
 ## Availability of Electronic Devices
+This sub-indicator estimates relative risk based on the average number of electronic devices per household member. This indicator can be estimated through 8 different variables:
 
+```{r echo = FALSE, results = 'asis'}
+names <- c("Survey", "Code", "Form Section", "Question", "Responses")
+survey <- rep("National Multi-Purpose Household Survey of December 2018", 9)
+code <- c("s1p3", "s7p1a", "s7p1b", "s7p1a1", "s11p11a", "s11p11b", "s11p12a", "s11p12b", "id_hogar")
+form.section <- c("Section 1, question 3", "section 7, question 1, subsection 1", "section 7, question 1, subsection 2", "section 7, question 1A", "Section 11, Question 1, subsection 1, subsection 'code'", "Section 11, Question 1, subsection 1, subsection 'number'", "Section 11, question 1, subsection 2, subsection 'code'", "section 11, question 1, subsection 2, subsection 'number'", "-")
+question <- c("How old are you? ¿Cuántos años cumplidos tiene (…)?", "Do you have an activated phone? (¿(…) tiene teléfono celular activado?)", "How many activated phones do you have? (¿Cuántos?)", "Is your phone a smartphone? (¿El (los) teléfono (s) celular (es) que tiene (…..) es/son smartphone (teléfono Inteligente, se puede comunicar a través de Wi-Fi, e-mails, red de datos, etc.)?)", "Does the household have a desktop computer? (¿Tiene este hogar: computadora de escritorio?)", "How many desktop computers does the household have? (¿Cuántos tiene?)", "Does the household have a laptop or tablet? (¿Tiene este hogar: computadora laptop/ tablet?)", "How many laptops and tablets does the household have? (¿Cuántos tiene?)", "Identification code for household assigned by INEC")
+responses <- c("numeric", "1 = yes, 2 = no", "numeric", "1 = yes, 2 = no", "1 = yes, 2 = no", "numeric", "1 = yes, 2 = no", "numeric", "string of characters (numbers)")
+table <- data.frame(cbind(survey, code, form.section, question, responses))
+names(table) <- names
+kable(table, caption = "Table 2.1: Relevant Variables for Indicator 2.1")
+```
+
+## Subset of Data of Interest
+1-4 year olds are removed from the data set as they do not need to use electronic devices nor are expected to use electronic devices.
+
+```{r}
+df1 <- df %>%
+        filter(s1p3 > 4) %>%
+        select(s1p3, s7p1a, s7p1b, s7p1a1, s11p11a, 
+               s11p11b, s11p12a, s11p12b, id_hogar)
+```
+
+## Number of smartphones per household
+The code transforms the values of variable *s7p1a* as follows: value 2 (which means the respondent does not have an activated phone) is replaced with 0; value 1 (which means the respondent does have an activated phone) stays 1. There were no NA values.
+```{r}
+df1$s7p1a[df1$s7p1a == 2] <- 0
+sum(is.na(df1$s7p1a))
+```
+
+The code then assigns the value 0 to variable *s7p1b* (the number of phones the respondent has) if *s7p1a* equals 2 (which means the respondent does not own any activated phone). In other cases the value of *s7p1b* is not changed. There are no NA values.
+
+```{r}
+df1$s7p1b[df1$s7p1a == 0] <- 0
+sum(is.na(df1$s7p1b))
+```
+
+Next, the code replaces the following values of variable *s7p1a1*: value 2 (which means the respondent's phone(s) is/are **not** smartphone(s)) is replaced with 0; value 1 (which means the respondent's phone(s) is/are smartphone(s)) remains 1. For rows where *s7p1b* equals 0 (which means the respondent does not own any phones), the value of *s7p1a1* is also set to 0 (which means the respondent does not own any smartphones). There are no NA values.
+
+```{r}
+df1$s7p1a1 <- ifelse(df1$s7p1a1 == 1, 1, 0)
+df1$s7p1a1[df1$s7p1b == 0] <- 0
+sum(is.na(df1$s7p1a1))
+```
+Following these operations, the number of smartphones per individual can now be calculated by multiplying *s7p1b* (which indicates the number of activated phones) with *s7p1a1* (which indicates if the respondent has/ does not have a smartphone). Finally, the number of smartphones is summed per household using the *id_hogar* variable. The results are stored in the ```dfphone``` data set.  
+
+```{r}
+dfphone <- df1 %>%
+        mutate(phone = s7p1b * s7p1a1) %>%
+        group_by(id_hogar) %>%
+        summarise(no.smartphones = sum(phone))
+```
 
 ## Access To Internet
 
@@ -135,7 +187,7 @@ Finally, a graph is created which compares the proportions in rural and urban ar
 ```{r}
 p <- ggplot(data = intacc, aes(y = prop, x = area, fill = s11p2)) + theme_bw()
 p1 <- p + geom_bar(position = "dodge", stat = "identity") 
-p2 <- p1 + labs(y = "Proportion of respondents (in %)", x = "", title = "Figure 2: Lack of Home Internet Connection of School-Age Population", subtitle = "Based on data from 10,543 respondents between 5 and 18 years old. Data collected\nthrough randomised cluster sampling at national level, where clusters\nwere constituted of households belonging to certain socio-economic strata.", caption = "Source: INEC Multi-Purpose Household Survey 2019", fill = "")
+p2 <- p1 + labs(y = "Proportion of respondents (in %)", x = "", title = "Figure 2: Lack of Home Internet Connection of School-Age Population", subtitle = "Based on data from 10,543 respondents between 5 and 18 years old. Surveyed\nhouseholds were selected through randomised cluster sampling at national level,\nwhere clusters represented different socio-economic strata.", caption = "Source: INEC Multi-Purpose Household Survey 2019", fill = "")
 p3 <- p2 + scale_fill_manual(name = "", values = (c("Have Access" = "#A3BFA5", "Have No Access" = "#A26E6E")))
 p3
 ```
