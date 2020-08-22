@@ -174,14 +174,14 @@ dfdevices <- dfcomputer %>%
         left_join(dfarea, by = "id_hogar")
 ```
 
-Finally, a graph is created which compares the proportions across different ethnical groups.
+Finally, a graph is created which compares the distribution of device availability across urban and rural regions. 
 
 ```{r}
 p <- ggplot() + theme_bw()
-p1 <- p + geom_boxplot(data = dfdevices, aes(y = ratio, x = area)) + ylim(0,3)
-p2 <- p1 + geom_hline(aes(yintercept = 1, col = "Ideal No.\nDevices"), size = 1, lty = "dashed") 
-p3 <- p2 + labs(y = "Number of Smart Devices per Household\nMember of 5+ years old", x = "", title = "Figure 1: Availability of Smart Devices per Household", subtitle = "Based on data from 5,849 households with respondents between 5 and 18 years old. Surveyed\nhouseholds were selected through randomised cluster sampling at national level,\nwhere clusters represented different socio-economic strata.", caption = "Source: INEC Multi-Purpose Household Survey 2019", fill = "")
-p4 <- p3 + scale_color_manual(name = "", values = c("Minimum No.\nDevices Required" = "#A3BFA5"))
+p1 <- p + geom_boxplot(data = dfdevices, aes(y = ratio, x = area, fill = area)) + ylim(0,3)
+p2 <- p1 + geom_hline(aes(yintercept = 1, col = "Ideal\nNumber of\nDevices"), size = 1.2, lty = "dashed") 
+p3 <- p2 + labs(y = "Number of Smart Devices per Household\nMember of 5+ years old", x = "", title = "Figure 1: Availability of Smart Devices per Household Member", subtitle = "Based on data from 5,849 households with children and young people of\nschool-going age (5-18 years old).", caption = "Source: INEC Multi-Purpose Household Survey 2019", fill = "")
+p4 <- p3 + scale_color_manual(name = "", values = c("Ideal\nNumber of\nDevices" = "#E96519")) + scale_fill_manual(name = "", values = c("urban" = "#907D73", "rural" = "#C1C37F"))
 p4
 ```
 
@@ -204,8 +204,8 @@ The variables are first converted into factor variables. There are no NA values 
 
 ```{r}
 df1 <- df %>%
-        mutate(s11p2 = factor(s11p2, levels = 1:2, labels = c("Have Access", "Have No Access"))) %>%
-        mutate(area = factor(area, levels = 1:2, labels = c("urban", "rural")))
+        mutate(s11p2 = factor(s11p2, levels = 1:2, labels = c("Have Access", "Do not have Access"))) %>%
+        mutate(eth = factor(s1p9, levels = 1:8, labels = c("indigenous", "Afroecuadorian", "Black", "Mulato", "montuvio", "mestizo", "white", "other")))
 sum(is.na(df$s11p2))
 ```
 
@@ -217,39 +217,79 @@ df2 <- df1 %>%
 nrow(df2)
 ```
 
-Subsequently, the proportions of respondents with and without access to the internet are calculated for both areas (rural and urban). This is saved in a new data frame.
+Subsequently, the proportions of respondents with and without access to the internet are calculated for each ethnic group. This is saved in a new data frame. Each ehtnic group is then assigned a rank in accordance with the proportion of respondents having access to internet. 
 
 ```{r}
-intacc <- df2 %>%
-        group_by(area, s11p2) %>%
+dfacc <- df2 %>%
+        group_by(eth, s11p2) %>%
         count() %>%
         ungroup() %>%
-        group_by(area) %>%
-        mutate(prop = n/sum(n)*100) %>%
-        select(area, s11p2, prop)
+        group_by(eth) %>%
+        mutate(prop = n/sum(n)*100)
+
+order <- dfacc %>%
+        filter(s11p2 == "Have Access") %>%
+        arrange(prop) %>%
+        rowid_to_column("rank") %>%
+        select(eth, rank)
+
+dfacc <- dfacc %>%
+        left_join(order, by = "eth")
 ```
 
 Finally, a graph is created which compares the proportions in rural and urban areas. 
 
 ```{r}
-p <- ggplot(data = intacc, aes(y = prop, x = area, fill = s11p2)) + theme_bw()
-p1 <- p + geom_bar(position = "dodge", stat = "identity") 
-p2 <- p1 + labs(y = "Proportion of respondents (in %)", x = "", title = "Figure 2: Lack of Home Internet Connection of School-Age Population", subtitle = "Based on data from 10,543 respondents between 5 and 18 years old. Surveyed\nhouseholds were selected through randomised cluster sampling at national level,\nwhere clusters represented different socio-economic strata.", caption = "Source: INEC Multi-Purpose Household Survey 2019", fill = "")
-p3 <- p2 + scale_fill_manual(name = "", values = (c("Have Access" = "#A3BFA5", "Have No Access" = "#A26E6E")))
-p3
-```
-
-Figure 1.1 graphs the resulting distribution. The distribution is is slightly left-skewed. Nevertheless, the distance between the minimum and maximum values remain meaningful in terms of relative risk: the minimum value, 27%, indicates a substantial amount of respondents in the province were connected (which corresponds with the lowest level of risk); the maximum value, 81%, indicates almost none of the survey respondents in the province were connected (which corresponds with the highest level of risk). There are thus no problematic outliers and normalisation can be performed.  
-
-```{r echo = FALSE}
-median <- median(dim1ind1$access)
-p <- ggplot(data = dim1ind1, aes(x = access)) + theme_bw()
-p1 <- p + geom_histogram(binwidth = 5)
-p2 <- p1 + geom_vline(aes(xintercept = median, col = "Median"))
-p3 <- p2 + labs(x = "Proportion of respondents not connected\nat home per Province (in %)", y = "Frequency", title = "Figure 1.1: Lack of Home Internet Connection per Province", color = "")
+p <- ggplot(data = dfacc, aes(y = prop, x = reorder(eth, rank), fill = s11p2)) + theme_bw()
+p1 <- p + geom_bar(position = "stack", stat = "identity") 
+p2 <- p1 + labs(y = "Proportion of respondents (in %)", x = "", title = "Figure 2: Home Internet Connection of School-Age\nPopulation per Self-identified Ethnicity", subtitle = "Based on data from 10,543 respondents between 5 and 18 years old. Surveyed\nhouseholds were selected through randomised cluster sampling at national level,\nwhere clusters represented different socio-economic strata.", caption = "Source: INEC Multi-Purpose Household Survey 2019", fill = "") + theme(axis.text.x = element_text(angle = 90, vjust = 0.2))
+p3 <- p2 + scale_fill_manual(name = "", values = (c("Have Access" = "#A3BFA5", "Do not have Access" = "#A26E6E")))
 p3
 ```
 
 ## Digital Literacy
 
+The sub-indicators and their relevant data have been selected and modeled on the (Competence Areas and Competences in the Digital Literacy Global Framework)[http://gaml.cite.hku.hk/] created by UNESCO and partners. Each competence area on which data is available are evaluated as a separate sub-indicator. There is data available on the following competencies: hardware and software operations; information and data literacy; communication and collaboration; digital content creation. There is no data available on the competencies: safety; problem solving; career-related competences. 
+
+```{r echo = FALSE, results = 'asis'}
+names <- c("Survey", "Code", "Form Section", "Question", "Responses")
+survey <- rep("National Multi-Purpose Household Survey of December 2018", 4)
+code <- c("s7p6", "s7p71", "s7p72", "s7p77")
+form.section <- c("Section 7, Question 6", "Section 7, question 7, subsection 1", "Section 7, question 7, subsection 2", "Section 7, question 7, subsection 7")
+question <- c("Have you used a computer from anywhere in the past 12 months?", "In the past 12 months when using a computer or laptop: have you copied or moved a document or folder?", "In the past 12 months when using a computer or laptop: have you used the copy and paste function in a document?", "In the past 12 months when using a computer or laptop: have you created a digital presentation such as powerpoint, prezi or slideshare?")
+responses <- c("1 = yes, 2 = no", rep("1 = yes, 2 = no, 99 = does not know or no answer", 3))
+table <- data.frame(cbind(survey, code, form.section, question, responses))
+names(table) <- names
+kable(table, caption = "Table 2.1: Relevant Variables for Indicator 2.1")
+```
+
+```{r}
+df1 <- df %>%
+  filter(s7p6 == 1 & s1p3 > 14)
+
+df2 <- df1 %>%
+  select(id_per, area, "Copied or Moved Document/Folder" = s7p71, "Used Copy/Paste Function"= s7p72, "Sent Emails with Attachment" = s7p73, "Installed New Devices" = s7p75, "Downloaded and installed software" = s7p76,"Created a Digital Presentation" = s7p77, "Used a USB-Stick" = s7p78) %>%
+  pivot_longer(-c(id_per, area), names_to = "Action", values_to = "Value") %>%
+  mutate(Value = factor(Value, levels = c(1,2,99), labels = c("yes", "no", "no"))) %>%
+  mutate(Action = factor(Action)) %>%
+  mutate(area = factor(area, levels = 1:2, labels = c("urban", "rural")))
+
+df3 <- df2 %>%
+  group_by(area, Action, Value) %>%
+  count() %>%
+  ungroup() %>%
+  group_by(area, Action) %>%
+  mutate(prop = n/sum(n)*100) %>%
+  filter(Value == "yes") %>%
+  ungroup() %>%
+  group_by(Action) %>%
+  mutate(order = mean(prop))
+
+p <- ggplot(data = df3, aes(x = reorder(Action, order), y = prop, fill = area)) + theme_bw() 
+p1 <- p + geom_bar(position = "dodge", stat = "identity") + coord_flip() 
+p2 <- p1 + labs(y = "Proportion of respondents who\nperformed the action (in %)", x = "", title = "Figure 3: Digital Actions Performed by\nEcuadorian Computer Users", subtitle = "Based on data from 7,808 respondents who: (1) lived in a household\nwith children and young people of school-going age; (2) had access to\na computer in the past 12 months and (3) were 15 years or older.", caption = "Source: INEC Multi-Purpose Household Survey 2019", fill = "")
+p3 <- p2 +  scale_fill_manual(name = "", values = c("urban" = "#907D73", "rural" = "#C1C37F"))
+p3
+  
+```
 
