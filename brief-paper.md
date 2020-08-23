@@ -173,7 +173,7 @@ identify groups at risk should thus take these factors into account,
 annd so should policies aimed at bridging this gap. The response to the
 continuing education crisis in Ecuador and in other countries should, as
 is almost always the case, take a holistic rather than an all-or-nothing
-approach
+approach.
 
 \~\~\~
 
