@@ -55,7 +55,8 @@ can use a device at the same time. The results in urban areas are
 slightly better. There, the median value equals 0.71, meaning three out
 of four members can use a smart device simultaneously.
 
-![](Figure_1.PNG)
+![Availability of Smart Devices per Ecuadorian Household Member 2019
+INEC data analysed by Max Aantjes](Figure_1.png)
 
 The variation in the data further demonstrates the inequality in the
 availability of smart devices within urban and rural areas. In urban
@@ -99,7 +100,8 @@ demonstrate the need for further research into the potential
 disproportional effect of the school closures on different ethnic and
 cultural groups.
 
-![](Figure_2.PNG)
+![Digital Actions Performed by Ecuadorian Computer Users 2019 INEC data
+analysed by Max Aantjes](Figure_2.png)
 
 The third factor of exclusion pertains to the inability of some learners
 and caretakers to utilise hardware and software. Unfortunately, this
@@ -130,7 +132,9 @@ performed different software and hardware operations in the past 12
 months. Only computer users who were 15 years and older and who belonged
 to household with learners of school-going age were considered.
 
-![](Figure_3.PNG)
+![Home Internet Connection of Ecuadorian School-Age Population per
+Self-identified Ethnicity 2019 INEC data analysed by Max
+Aantjes](Figure_3.png)
 
 The figure indicates there is a convergence between the level of
 literacy of urban and rural areas in terms of minimal digital content
