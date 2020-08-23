@@ -42,13 +42,15 @@ In anticipation of such measures, this exploratory analysis has suggested that s
 
 ~~~
 
-*Links to the raw data are available in the corresponding GitHub repository. To ensure reproducibility, all computations used to generate the results, as well as justifications where relevant, have been made available within the appendix file of this repository. This written piece is part of a series of posts which are meant to be conversations starters rather than a bullet-proof analyses. It hopes to inspire others to traverse beyond its inevitable limitations*
+*Links to the raw data are available in the corresponding [GitHub repository](https://github.com/MaxAantjes/Exp-Analysis-Exclusion-EDU-EC-COV19). To ensure reproducibility, all computations used to generate the results, as well as justifications where relevant, have been made available within the [appendix file](https://github.com/MaxAantjes/Exp-Analysis-Exclusion-EDU-EC-COV19/blob/master/appendix.md) of this repository. This written piece is part of a series of posts which are meant to be conversations starters rather than a bullet-proof analyses. It hopes to inspire others to traverse beyond its inevitable limitations*
 
 ## References
 
 Constante, S. (2020). *Ecuador: la educación online desde casa es imposible e injusta*. El País. Available from: https://elpais.com/elpais/2020/06/12/planeta_futuro/1591955314_376413.html
 
 Global Alliance to Monitor Learning. *Competence Descriptors & Glossary*. Available from: http://gaml.cite.hku.hk/competence-descriptors-glossary/ [accessed 23 August 2020]. 
+
+INEC, (2018). *Tecnologías de la Información y Comunicación:Encuesta Multipropósito - TIC 2018*. Available from: https://www.ecuadorencifras.gob.ec/documentos/web-inec/Estadisticas_Sociales/TIC/2018/201812_Principales_resultados_TIC_Multiproposito.pdf [accessed 23 August 2020].
 
 Ministerio de Educación, (2020A). *COMUNICADO OFICIAL | Suspensión de las actividades académicas para los estudiantes para precautelar la salud de la comunidad educativa*. Available from: https://educacion.gob.ec/comunicado-oficial-suspension-de-las-actividades-academicas-para-los-estudiantes-para-precautelar-la-salud-de-la-comunidad-educativa/ [accessed 23 August 2020].  
 
@@ -65,8 +67,6 @@ Ministerio de Educación, (2020F). *Llega “A-prender la Tele” a la pantalla 
 MINTEL, (2020). *Proyecto Infocentros Ecuador: Estadisticas*. Available from: https://infocentros.mintel.gob.ec/estadisticas-infocentros/ [accessed 23 August 2020].  
 
 Save the Children, (2020). *Save our Education: Protect every child's right to learn in the COVID-19 response and recovery*. Available from: https://educacion.gob.ec/comunicado-oficial-el-ministerio-de-educacion-informa-a-la-comunidad-educativa-que-trabaja-de-manera-permanente-para-apoyar-en-el-nuevo-modelo-de-aprendizaje/ [accessed 23 August 2020].  
-
-INEC, (2018). *Tecnologías de la Información y Comunicación:Encuesta Multipropósito - TIC 2018*. Available from: https://www.ecuadorencifras.gob.ec/documentos/web-inec/Estadisticas_Sociales/TIC/2018/201812_Principales_resultados_TIC_Multiproposito.pdf [accessed 23 August 2020].
 
 UNESCO, (2020). *Education: From disruption to recovery*. UNESCO  Institute for Statistics data. Available from: https://en.unesco.org/covid19/educationresponse [accessed 23 August 2020]. 
 

@@ -177,13 +177,16 @@ approach.
 
 \~\~\~
 
-*Links to the raw data are available in the corresponding GitHub
-repository. To ensure reproducibility, all computations used to generate
-the results, as well as justifications where relevant, have been made
-available within the appendix file of this repository. This written
-piece is part of a series of posts which are meant to be conversations
-starters rather than a bullet-proof analyses. It hopes to inspire others
-to traverse beyond its inevitable limitations*
+*Links to the raw data are available in the corresponding [GitHub
+repository](https://github.com/MaxAantjes/Exp-Analysis-Exclusion-EDU-EC-COV19).
+To ensure reproducibility, all computations used to generate the
+results, as well as justifications where relevant, have been made
+available within the [appendix
+file](https://github.com/MaxAantjes/Exp-Analysis-Exclusion-EDU-EC-COV19/blob/master/appendix.md)
+of this repository. This written piece is part of a series of posts
+which are meant to be conversations starters rather than a bullet-proof
+analyses. It hopes to inspire others to traverse beyond its inevitable
+limitations*
 
 ## References
 
@@ -195,6 +198,11 @@ Global Alliance to Monitor Learning. *Competence Descriptors &
 Glossary*. Available from:
 <http://gaml.cite.hku.hk/competence-descriptors-glossary/> \[accessed 23
 August 2020\].
+
+INEC, (2018). *Tecnologías de la Información y Comunicación:Encuesta
+Multipropósito - TIC 2018*. Available from:
+<https://www.ecuadorencifras.gob.ec/documentos/web-inec/Estadisticas_Sociales/TIC/2018/201812_Principales_resultados_TIC_Multiproposito.pdf>
+\[accessed 23 August 2020\].
 
 Ministerio de Educación, (2020A). *COMUNICADO OFICIAL | Suspensión de
 las actividades académicas para los estudiantes para precautelar la
@@ -234,11 +242,6 @@ from: <https://infocentros.mintel.gob.ec/estadisticas-infocentros/>
 Save the Children, (2020). *Save our Education: Protect every child’s
 right to learn in the COVID-19 response and recovery*. Available from:
 <https://educacion.gob.ec/comunicado-oficial-el-ministerio-de-educacion-informa-a-la-comunidad-educativa-que-trabaja-de-manera-permanente-para-apoyar-en-el-nuevo-modelo-de-aprendizaje/>
-\[accessed 23 August 2020\].
-
-INEC, (2018). *Tecnologías de la Información y Comunicación:Encuesta
-Multipropósito - TIC 2018*. Available from:
-<https://www.ecuadorencifras.gob.ec/documentos/web-inec/Estadisticas_Sociales/TIC/2018/201812_Principales_resultados_TIC_Multiproposito.pdf>
 \[accessed 23 August 2020\].
 
 UNESCO, (2020). *Education: From disruption to recovery*. UNESCO
