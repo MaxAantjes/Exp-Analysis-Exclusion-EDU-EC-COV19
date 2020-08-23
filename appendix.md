@@ -57,12 +57,12 @@ were surveyed, with the sampling design taking the form of randomised
 cluster sampling.
 
 Supplementary information on the data collection process and the
-definition of some variables has been made available by INEC (2020). An
-example of an important variable defined in that document is the
-distinction between rural areas, i.e. population centers of less than
-2,000 citizens, viz. urban areas, i.e. population centers of 2000
+definition of some variables has been made available by INEC (Andrade et
+al., 2020). An example of an important variable defined in that document
+is the distinction between rural areas, i.e. population centers of less
+than 2,000 citizens, viz. urban areas, i.e. population centers of 2000
 citizens or more (ibid, p. 11). All other interpretations of variables
-are directly taken for the form used during the survey process (INEC,
+are directly taken from the form used during the survey process (INEC,
 2019).
 
 ### Download
@@ -366,6 +366,16 @@ dfdevices %>%
     ## 1 urban         0.736           0.714       0.462
     ## 2 rural         0.405           0.333       0.391
 
+We can also calculate the number of households surveyed per area. There
+were 3,595 urban households and 2,254 rural households.
+
+``` r
+summary(dfarea$area)
+```
+
+    ## urban rural 
+    ##  3595  2254
+
 Finally, a graph is created which compares the distribution of device
 availability across urban and rural regions. 1 outlier is removed from
 the graph for readability purposes.
@@ -376,15 +386,15 @@ p1 <- p + geom_boxplot(data = dfdevices, aes(y = ratio, x = area, fill = area)) 
 p2 <- p1 + geom_hline(aes(yintercept = 1, col = "Ideal\nNumber of\nDevices"), size = 1.2, lty = "dashed") 
 p3 <- p2 + labs(y = "Number of Smart Devices per Household\nMember of 5+ years old", x = "", 
                 title = "Figure 1: Availability of Smart Devices per Ecuadorian\nHousehold Member", 
-                subtitle = "Based on data from 5,849 households with children and young people of\nschool-going age (5-18 years old). Devices counted as smart devices are:\nsmartphones, laptops, tablets and desktops.", 
-                caption = "Source: INEC Multi-Purpose Household Survey 2019", fill = "")
+                subtitle = "Based on data from 3,595 urban households and 2,254 rural households with\nchildren and young people of school-going age (5-18 year-olds). Devices counted\nas smart devices are: smartphones, laptops, tablets and desktops.", 
+                caption = "Source: Data from INEC Multi-Purpose Household Survey 2019\nData Summary by author (Max Aantjes)", fill = "")
 p4 <- p3 + scale_color_manual(name = "", values = c("Ideal\nNumber of\nDevices" = "#E96519")) + scale_fill_manual(name = "", values = c("urban" = "#907D73", "rural" = "#C1C37F"))
 p4
 ```
 
     ## Warning: Removed 1 rows containing non-finite values (stat_boxplot).
 
-![](appendix_files/figure-gfm/unnamed-chunk-22-1.png)<!-- -->
+![](appendix_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
 
 ### Access To Internet
 
@@ -486,13 +496,13 @@ p1 <- p + geom_bar(position = "stack", stat = "identity")
 p2 <- p1 + labs(y = "Proportion of respondents (in %)", x = "", 
                 title = "Figure 2: Home Internet Connection of Ecuadorian\nSchool-Age Population per Self-identified Ethnicity", 
                 subtitle = "Based on data from 10,538 respondents between 5 and 18 years old. Sample\nsizes across ethnic groups varied, with 541 montuvio, 1083 indigenous, 165\nafroecuadorian, 175 black, 135 mulato, 8267 mestizo and 172 white respondents.", 
-                caption = "Source: INEC Multi-Purpose Household Survey 2019", fill = "") + 
+                caption = "Source: Data from INEC Multi-Purpose Household Survey 2019\nData Summary by author (Max Aantjes)", fill = "") + 
         theme(axis.text.x = element_text(angle = 90, vjust = 0.2))
 p3 <- p2 + scale_fill_manual(name = "", values = (c("Have Access" = "#A3BFA5", "Do not have Access" = "#A26E6E")))
 p3
 ```
 
-![](appendix_files/figure-gfm/unnamed-chunk-28-1.png)<!-- -->
+![](appendix_files/figure-gfm/unnamed-chunk-29-1.png)<!-- -->
 
 ### Digital Literacy
 
@@ -586,21 +596,22 @@ p1 <- p + geom_bar(position = "dodge", stat = "identity") + coord_flip()
 p2 <- p1 + labs(y = "Proportion of respondents who\nperformed the action (in %)", x = "", 
                 title = "Figure 3: Digital Actions Performed by Ecuadorian\nComputer Users in the last 12 Months", 
                 subtitle = "Based on data from 7,808 respondents who: (1) lived in a household\nwith children and young people of school-going age; (2) had access\nto a computer in the past 12 months and (3) were 15 years or older.", 
-                caption = "Source: INEC Multi-Purpose Household Survey 2019", fill = "")
+                caption = "Source: Data from INEC Multi-Purpose Household Survey 2019\nData Summary by author (Max Aantjes)", fill = "")
 p3 <- p2 +  scale_fill_manual(name = "", values = c("urban" = "#907D73", "rural" = "#C1C37F"))
 p3
 ```
 
-![](appendix_files/figure-gfm/unnamed-chunk-34-1.png)<!-- -->
+![](appendix_files/figure-gfm/unnamed-chunk-35-1.png)<!-- -->
 
 # References
+
+Andrade D., Bucheli V., Nabernegg M., & Garcés Christian, (2020).
+*Documento Metodológico de Diseño Muestral de la Encuesta
+Multipropósito*. INEC. Available from:
+<https://www.ecuadorencifras.gob.ec/documentos/web-inec/Multiproposito/2019/201912_Metodologia%20Disenio%20Muestral_Multiproposito.pdf>
+\[accessed 23 August 2020\].
 
 INEC, (2019). *Encuesta Nacional Multipróposito de
 Hogares-Diciembre-2019*. Available from:
 <https://www.ecuadorencifras.gob.ec/documentos/web-inec/Multiproposito/2019/201912_Formulario_Multiproposito.pdf>
-\[accessed 23 August 2020\].
-
-INEC, (2020). *Documento Metodológico de Diseño Muestral de la Encuesta
-Multipropósito*. Available from:
-<https://www.ecuadorencifras.gob.ec/documentos/web-inec/Multiproposito/2019/201912_Metodologia%20Disenio%20Muestral_Multiproposito.pdf>
 \[accessed 23 August 2020\].
