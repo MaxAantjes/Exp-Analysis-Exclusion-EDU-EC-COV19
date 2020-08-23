@@ -183,7 +183,7 @@ piece is part of a series of posts which are meant to be conversations
 starters rather than a bullet-proof analyses. It hopes to inspire others
 to traverse beyond its inevitable limitations*
 
-# References
+## References
 
 Constante, S. (2020). *Ecuador: la educación online desde casa es
 imposible e injusta*. El País. Available from:
