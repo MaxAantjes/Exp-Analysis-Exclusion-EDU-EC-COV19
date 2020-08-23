@@ -26,9 +26,9 @@ library(ggplot2)
 ```
 # Data Extraction
 ### Data Source and Relevance
-The indicator values for this analysis are taken from the results of the  Ecuadorian National Multi-Purpose Household Survey of December 2019 (Encuesta Nacional Multipropósito de Hogares - Diciembre 2019). The survey collected data for a variety of socio-economic indicators and was conducted by the Ecuadorian national census and statistics institute, INEC. At the time of writing, the form and raw data are available in this [online repository](https://www.ecuadorencifras.gob.ec/encuesta-nacional-multiproposito-de-hogares/).
+The analysis performed below is based on the results of the Ecuadorian National Multi-Purpose Household Survey of December 2019 (Encuesta Nacional Multipropósito de Hogares - Diciembre 2019). The survey collected data for a variety of socio-economic indicators and was conducted by the Ecuadorian national census and statistics institute, INEC. At the time of writing, the form and raw data are available in this [online repository](https://www.ecuadorencifras.gob.ec/encuesta-nacional-multiproposito-de-hogares/). According to INEC, the data is representative at national, national-rural and national-urban level. A total of 11,528 households were surveyed, with the sampling design taking the form of randomised cluster sampling. 
 
-According to INEC, the data is representative at national, national-rural and national-urban level. A total of 11,528 households were surveyed, with the sampling design taking the form of randomised cluster sampling. Supplementary information on the data collection process and the definition of some variables is also available from INEC (2020). An example of an important variable defined in that document is the distinction between rural areas, i.e. population centers of less than 2,000 citizens, viz. urban areas, i.e. population centers of 2000 citizens or more (ibid, p. 11). 
+Supplementary information on the data collection process and the definition of some variables has been made available by INEC (2020). An example of an important variable defined in that document is the distinction between rural areas, i.e. population centers of less than 2,000 citizens, viz. urban areas, i.e. population centers of 2000 citizens or more (ibid, p. 11). All other interpretations of variables are directly taken for the form used during the survey process (INEC, 2019).
 
 ### Download
 The following code is used to extract the data from the data repository. 
@@ -243,7 +243,7 @@ p4 <- p3 + scale_color_manual(name = "", values = c("Ideal\nNumber of\nDevices" 
 p4
 ```
 
-## Access To Internet
+### Access To Internet
 #### Code Book
 The second graph aims to estimate the relative risk of exclusion from education based on the access to internet in households. This graph relies on 1 variable summarised in *Code Book Table 3*: 
 
@@ -255,7 +255,7 @@ question <- c("Does the household have access to internet? (¿Tiene este hogar a
 responses <- c("1 = yes, 2 = no")
 table <- data.frame(cbind(variable, form.section, question, responses))
 names(table) <- names
-kable(table)
+kable(table, caption = "Code Book Table 3")
 ```
 
 #### Learner Access to Internet at Home
@@ -267,12 +267,13 @@ df1 <- df %>%
 sum(is.na(df$s11p2))
 ```
 
-Respondents aged 5 to 18 years old are then subsetted. The subset contains responses from 1083 indigenous, 165 afroecuadorian, 175 black, 135 mulato, 541 montuvio, 8267 mestizo, 172 white and 5 'other' respondents. 
+Respondents aged 5 to 18 years old are then subsetted. The subset contains responses from 1083 indigenous, 165 afroecuadorian, 175 black, 135 mulato, 541 montuvio, 8267 mestizo, 172 white and 5 'other' respondents. Without 'other', the resulting data set has 10,538 respondents. 
 
 ```{r}
 df2 <- df1 %>%
         filter(s1p3 %in% 5:18)
 summary(df2$eth)
+nrow(df2) - 5
 ```
 
 Subsequently, the proportions of respondents with and without access to the internet are calculated for each ethnic group. This is saved in a new data frame, ```dfacc```. The ethnic group, 'other', is removed due to the small sample size (<6). Each ehtnic group is then assigned a rank in accordance with the proportion of respondents having access to internet. 
@@ -312,12 +313,16 @@ Finally, a stacked bargraph is created which compares the proportions in terms o
 ```{r}
 p <- ggplot(data = dfacc, aes(y = prop, x = reorder(eth, rank), fill = s11p2)) + theme_bw()
 p1 <- p + geom_bar(position = "stack", stat = "identity") 
-p2 <- p1 + labs(y = "Proportion of respondents (in %)", x = "", title = "Figure 2: Home Internet Connection of Ecuadorian\nSchool-Age Population per Self-identified Ethnicity", subtitle = "Based on data from 10,543 respondents between 5 and 18 years old. Sample\nsizes across ethnic groups varied, with 541 montuvio, 1083 indigenous, 165\nafroecuadorian, 175 black, 135 mulato, 8267 mestizo and 172 white respondents.", caption = "Source: INEC Multi-Purpose Household Survey 2019", fill = "") + theme(axis.text.x = element_text(angle = 90, vjust = 0.2))
+p2 <- p1 + labs(y = "Proportion of respondents (in %)", x = "", 
+                title = "Figure 2: Home Internet Connection of Ecuadorian\nSchool-Age Population per Self-identified Ethnicity", 
+                subtitle = "Based on data from 10,538 respondents between 5 and 18 years old. Sample\nsizes across ethnic groups varied, with 541 montuvio, 1083 indigenous, 165\nafroecuadorian, 175 black, 135 mulato, 8267 mestizo and 172 white respondents.", 
+                caption = "Source: INEC Multi-Purpose Household Survey 2019", fill = "") + 
+        theme(axis.text.x = element_text(angle = 90, vjust = 0.2))
 p3 <- p2 + scale_fill_manual(name = "", values = (c("Have Access" = "#A3BFA5", "Do not have Access" = "#A26E6E")))
 p3
 ```
 
-## Digital Literacy
+### Digital Literacy
 #### Code Book
 The third graph aims to estimate the relative risk of exclusion from education based on the digital literacy of computer users. This graph relies on 7 variables summarised in *Code Book Table 4*: 
 
@@ -385,11 +390,16 @@ Finally, a flipped bargraph is created which compares the proportions in terms o
 ```{r}
 p <- ggplot(data = df3, aes(x = reorder(Action, order), y = prop, fill = area)) + theme_bw() 
 p1 <- p + geom_bar(position = "dodge", stat = "identity") + coord_flip() 
-p2 <- p1 + labs(y = "Proportion of respondents who\nperformed the action (in %)", x = "", title = "Figure 3: Digital Actions Performed by Ecuadorian\nComputer Users in the last 12 Months", subtitle = "Based on data from 7,808 respondents who: (1) lived in a household\nwith children and young people of school-going age; (2) had access to\na computer in the past 12 months and (3) were 15 years or older.", caption = "Source: INEC Multi-Purpose Household Survey 2019", fill = "")
+p2 <- p1 + labs(y = "Proportion of respondents who\nperformed the action (in %)", x = "", 
+                title = "Figure 3: Digital Actions Performed by Ecuadorian\nComputer Users in the last 12 Months", 
+                subtitle = "Based on data from 7,808 respondents who: (1) lived in a household\nwith children and young people of school-going age; (2) had access\nto a computer in the past 12 months and (3) were 15 years or older.", 
+                caption = "Source: INEC Multi-Purpose Household Survey 2019", fill = "")
 p3 <- p2 +  scale_fill_manual(name = "", values = c("urban" = "#907D73", "rural" = "#C1C37F"))
 p3
 ```
 
-# References
+# References  
 
-INEC, (2020). *Documento Metodológico de Diseño Muestral de la Encuesta Multipropósito*. Available from: https://www.ecuadorencifras.gob.ec/documentos/web-inec/Multiproposito/2019/201912_Metodologia%20Disenio%20Muestral_Multiproposito.pdf [accessed 11 July 2020].  
+INEC, (2019). *Encuesta Nacional Multipróposito de Hogares-Diciembre-2019*. Available from: https://www.ecuadorencifras.gob.ec/documentos/web-inec/Multiproposito/2019/201912_Formulario_Multiproposito.pdf [accessed 23 August 2020].  
+
+INEC, (2020). *Documento Metodológico de Diseño Muestral de la Encuesta Multipropósito*. Available from: https://www.ecuadorencifras.gob.ec/documentos/web-inec/Multiproposito/2019/201912_Metodologia%20Disenio%20Muestral_Multiproposito.pdf [accessed 23 August 2020].  
