@@ -38,7 +38,7 @@ the files above, as well as the references made within those files.
 
 ## Data Source
 
-The analsyis is based on the results of the Ecuadorian National
+The analysis is based on the results of the Ecuadorian National
 Multi-Purpose Household Survey of December 2019 (Encuesta Nacional
 Multipropósito de Hogares - Diciembre 2019). The survey collected data
 for a variety of socio-economic indicators and was conducted by the
@@ -159,7 +159,7 @@ and the prevalence of digital illiteracy. This structural exclusion
 threatens to exacerbate the socio-economic inequalities that exist
 between ethnic and cultural groups, as well as between rural and urban
 populations. Any attempts to identify groups at risk should thus take
-these factors into account, annd so should policies aimed at bridging
+these factors into account, and so should policies aimed at bridging
 this gap. The response to the continuing education crisis in Ecuador and
 in other countries should, as is almost always the case, take a holistic
 rather than an all-or-nothing approach.
