@@ -17,15 +17,15 @@ Max Aantjes
         Interest](#subset-of-the-data-of-interest)
   - [Analysis](#analysis)
       - [Availability of Smart Devices](#availability-of-smart-devices)
-      - [Access To Internet](#access-to-internet)
+      - [Access to Internet](#access-to-internet)
       - [Digital Literacy](#digital-literacy)
   - [References](#references)
 
 # Introduction
 
 The following sections contain all computations for the creation of the
-exploratory data results summarised in the the brief paper. Computations
-are accompanied by references and justifications to clarify any choices
+exploratory data results summarised in the brief paper. Computations are
+accompanied by references and justifications to clarify any choices
 made. Through *code book tables*, explicit references are also made to
 the survey questions which responses were used in the analysis.
 
@@ -59,8 +59,8 @@ cluster sampling.
 Supplementary information on the data collection process and the
 definition of some variables has been made available by INEC (Andrade et
 al., 2020). An example of an important variable defined in that document
-is the distinction between rural areas, i.e. population centers of less
-than 2,000 citizens, viz. urban areas, i.e. population centers of 2000
+is the distinction between rural areas, i.e. population centres of less
+than 2,000 citizens, viz. urban areas, i.e. population centres of 2000
 citizens or more (ibid, p. 11). All other interpretations of variables
 are directly taken from the form used during the survey process (INEC,
 2019).
@@ -87,7 +87,7 @@ Missing values are not removed at this stage. The questions in the
 survey were constructed in a hierarchical manner, where answers to
 earlier questions can make later questions redundant. Follow-up
 questions (such as for example: do you own a smartphone?) were not asked
-if the respondent answered “no”to a preceding question (such as for
+if the respondent answered “no” to a preceding question (such as for
 example: do you own a phone?). For this reason, missing values do
 **not** necessarily indicate missing information. Accordingly, missing
 values are interpreted, adapted and potentially removed on a case by
@@ -97,7 +97,7 @@ case basis.
 
 First the classes of the categorical variables which are used for
 grouping and identification are specified. The relevant variables are
-first summarised in *Code Book Table 1*
+first summarised in *Code Book Table 1*:
 
 | Code      | Form Section          | Question                                                                                                                     | Responses                                                                                                 |
 | :-------- | :-------------------- | :--------------------------------------------------------------------------------------------------------------------------- | :-------------------------------------------------------------------------------------------------------- |
@@ -139,7 +139,7 @@ The 2,690 missing values in the `eth` variable were all recorded with
 0-4 year-olds. Since these respondents are not of school-going age nor
 likely compete for resources such as electronic devices needed by the
 school-going population, they are not of relevance to the data analysis.
-Accordingly, this age group will later be subsetted from the data set.
+Accordingly, this age group will later be removed from the data set.
 
 ``` r
 unique(dfperson$s1p3[is.na(dfperson$eth)])
@@ -160,10 +160,10 @@ df <- dfperson %>%
 ### Subset of the Data of Interest
 
 Only households with children or young people of schoolgoing age (5 - 18
-year-olds) are relevant to this analysis. For this purpose, the data is
-subsetted. The `agecheck()` function checks if there is at least one
-household member who is between 5 and 18 years old, returning value 1,
-or not, returning value 0.
+year-olds) are relevant to this analysis. For this purpose, a subset is
+taken from the data. The `agecheck()` function checks if there is at
+least one household member who is between 5 and 18 years old, returning
+value 1, or not, returning value 0.
 
 ``` r
 agecheck <- function(x){
@@ -185,9 +185,9 @@ subset <- df %>%
         select(id_hogar, subset)
 ```
 
-The households of interest are subsetted from the `df` data frame. For
-reasons explained above, any respondents between 0 and 4 years old are
-also removed from the data set.
+A subset of the households of interest is taken from the `df` data
+frame. For reasons explained above, any respondents between 0 and 4
+years old are also removed from the data set.
 
 ``` r
 df <- df %>%
@@ -268,7 +268,7 @@ dfphone <- df1 %>%
 
 #### Number of computers, laptops and tablets per household
 
-The following code creates a dataframe listing the number of computers,
+The following code creates a data frame listing the number of computers,
 laptops and tablets per household. It first sets the value of variable
 *s11p11b* (the number of desktop computers) to 0 if *s11p11a* equals 2
 (which means the household does not have a desktop computer). There were
@@ -396,7 +396,7 @@ p4
 
 ![](appendix_files/figure-gfm/unnamed-chunk-23-1.png)<!-- -->
 
-### Access To Internet
+### Access to Internet
 
 #### Code Book
 
@@ -424,11 +424,11 @@ sum(is.na(df$s11p2))
 
     ## [1] 0
 
-Respondents aged 5 to 18 years old are then subsetted. The subset
-contains responses from 1083 indigenous, 165 afroecuadorian, 175 black,
-135 mulato, 541 montuvio, 8267 mestizo, 172 white and 5 ‘other’
-respondents. Without ‘other’, the resulting data set has 10,538
-respondents.
+A subset of the respondents aged 5 to 18 years old is then taken from
+the data set. The subset contains responses from 1083 indigenous, 165
+afroecuadorian, 175 black, 135 mulato, 541 montuvio, 8267 mestizo, 172
+white and 5 ‘other’ respondents. Without ‘other’, the resulting data set
+has 10,538 respondents.
 
 ``` r
 df2 <- df1 %>%
@@ -450,7 +450,7 @@ nrow(df2) - 5
 Subsequently, the proportions of respondents with and without access to
 the internet are calculated for each ethnic group. This is saved in a
 new data frame, `dfacc`. The ethnic group, ‘other’, is removed due to
-the small sample size (\<6). Each ehtnic group is then assigned a rank
+the small sample size (\<6). Each ethnic group is then assigned a rank
 in accordance with the proportion of respondents having access to
 internet.
 
@@ -487,8 +487,8 @@ The results are listed in *table 1*.
 
 Table 1: Home Internet Access per Ethnic group
 
-Finally, a stacked bargraph is created which compares the proportions in
-terms of different ethnic groups.
+Finally, a stacked bar chart is created which compares the proportions
+in terms of different ethnic groups.
 
 ``` r
 p <- ggplot(data = dfacc, aes(y = prop, x = reorder(eth, rank), fill = s11p2)) + theme_bw()
@@ -527,9 +527,9 @@ Code Book Table 4
 
 #### Digital Literacy of Members of Households with Learners
 
-First, the data frame needs to be subsetted for respondents who (i) used
-a computer and (ii) are over the age of 14. In other cases, the digital
-literacy questions listed in the codebook were **not** asked.
+First, a subset of the data frame needs to be taken with respondents who
+(i) used a computer and (ii) are over the age of 14. In other cases, the
+digital literacy questions listed in the codebook were **not** asked.
 
 ``` r
 df1 <- df %>%
@@ -587,8 +587,8 @@ The results are listed in *table 2*.
 
 Table 2: Digital Actions Performed per Area
 
-Finally, a flipped bargraph is created which compares the proportions in
-terms of rural and urban respondents.
+Finally, a flipped bar chart is created which compares the proportions
+in terms of rural and urban respondents.
 
 ``` r
 p <- ggplot(data = df3, aes(x = reorder(Action, order), y = prop, fill = area)) + theme_bw() 
