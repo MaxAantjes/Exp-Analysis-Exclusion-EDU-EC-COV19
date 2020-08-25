@@ -15,7 +15,7 @@ This repository provides a brief analysis of the potential inequalities
 generated in the Ecuadorian education system as a result of the outbreak
 of Covid-19. In particular, it focuses on the government’s attempts to
 digitalise education, which threatens to marginalise a substantial
-proportion of learners due to their lack of digital resources. The
+proportion of learners due to the unequal distribution of smart electronic devices, internet access and digital literacy. The
 purpose of the analysis is *exploratory* in nature and intends to
 highlight potential risks, rather than prove those risks or their
 realisation beyond doubt. Apart from this file, the repository contains
