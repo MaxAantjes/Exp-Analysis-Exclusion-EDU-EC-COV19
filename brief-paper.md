@@ -184,9 +184,9 @@ results, as well as justifications where relevant, have been made
 available within the [appendix
 file](https://github.com/MaxAantjes/Exp-Analysis-Exclusion-EDU-EC-COV19/blob/master/appendix.md)
 of this repository. This written piece is part of a series of posts
-which are meant to be conversations starters rather than a bullet-proof
+which are meant to be conversation starters rather than bullet-proof
 analyses. It hopes to inspire others to traverse beyond its inevitable
-limitations*
+limitations.*
 
 ## References
 
