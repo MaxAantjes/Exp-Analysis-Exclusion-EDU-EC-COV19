@@ -17,7 +17,7 @@ devices, internet access and digital literacy.**
 The Ecuadorian government’s efforts to ensure access to education have
 primarily focused on the provision of digital resources. Country-wide
 school closures commenced on the 13th of March (Ministerio de Educación,
-2020A).On the 16th of March, digital classes commenced in the highlands
+2020A). On the 16th of March, digital classes commenced in the highlands
 and amazon regions, complemented by the launch of an online portal which
 serves as a repository of over 840 digital learning tools and a special
 website which hosts forums, videos, tutorials, homework and
