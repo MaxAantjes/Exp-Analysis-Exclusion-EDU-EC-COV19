@@ -1,7 +1,7 @@
 Risk of Exclusion in Education due to the Covid-19 Outbreak in Ecuador
 ================
 Max Aantjes
-27/07/2020
+23/08/2020
 
 **The world is facing an unparalleled education crisis. At the time of
 writing, still over a billion learners in 143 countries are affected by
